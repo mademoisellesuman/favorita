@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Favorita</title>
+
+  <!-- Inter: a clean, modern font from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Floating navigation island -->
+  <nav class="island" aria-label="Main navigation">
+    <a href="#home" class="island__brand">Favorita</a>
+    <ul class="island__links">
+      <li><a href="#home" data-view="home">Home</a></li>
+      <li><a href="#search" data-view="search">Search</a></li>
+      <li>
+        <a href="#favorites" data-view="favorites">
+          Favorites <span class="badge" id="favCount" hidden>0</span>
+        </a>
+      </li>
+      <li>
+        <a href="#cart" data-view="cart">
+          Cart <span class="badge" id="cartCount" hidden>0</span>
+        </a>
+      </li>
+      <li><a href="#profile" data-view="profile">Profile</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <!-- SEARCH VIEW -->
+    <section id="view-search" class="view" hidden>
+      <h2 class="view__title">Search</h2>
+
+      <input class="searchbar" id="searchInput" type="search"
+             placeholder="Search products, brands, or @username"
+             aria-label="Search products, brands, or people" autocomplete="off" />
+
+      <div class="toolbar toolbar--search">
+        <label class="sort">
+          <span>Category</span>
+          <select id="searchCategory">
+            <option value="all">All</option>
+            <option value="skincare">Skincare</option>
+            <option value="makeup">Makeup</option>
+          </select>
+        </label>
+        <label class="sort">
+          <span>Brand</span>
+          <select id="searchBrand"></select>
+        </label>
+        <label class="sort">
+          <span>Platform</span>
+          <select id="searchPlatform">
+            <option value="all">All</option>
+            <option value="shopee">Shopee</option>
+            <option value="lazada">Lazada</option>
+            <option value="tiktok">TikTok Shop</option>
+          </select>
+        </label>
+      </div>
+
+      <div id="searchPeopleBox" hidden>
+        <h3 class="section-title">People</h3>
+        <div class="users" id="searchUsers"></div>
+      </div>
+
+      <h3 class="section-title" id="searchSummary">Products</h3>
+            <div class="grid" id="searchGrid"></div>
+      <div class="status" id="searchStatus" hidden></div>
+      <p class="empty" id="searchEmpty" hidden>No products match your search.</p>
+      <div class="more"><button class="btn btn--ghost" id="searchMore" type="button" hidden>Load more</button></div>
+    </section>
+
+    <!-- HOME VIEW -->
+    <section id="view-home" class="view">
+      <header class="hero">
+        <p class="eyebrow">Community picks</p>
+        <h1>Skincare &amp; makeup, recommended by real people</h1>
+        <p class="hero__sub">Discover products others love, then shop on Shopee, Lazada, or TikTok Shop.</p>
+        <p class="disclosure">Some links are affiliate links. The person who recommended a product may earn a commission at no extra cost to you. Clicks on shop buttons are counted anonymously.</p>
+      </header>
+
+      <div class="toolbar">
+        <div class="filters" id="filters" role="group" aria-label="Filter by category">
+          <button class="chip is-active" data-category="all">All</button>
+          <button class="chip" data-category="skincare">Skincare</button>
+          <button class="chip" data-category="makeup">Makeup</button>
+        </div>
+
+        <label class="sort">
+          <span>Sort by</span>
+        <select id="sortSelect">
+          <option value="default">Newest</option>
+          <option value="local">Local first</option>
+          <option value="international">International first</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+        </select>
+        </label>
+      </div>
+
+      <div class="grid" id="productGrid"></div>
+        <div class="status" id="homeStatus" hidden></div>
+          <p class="empty" id="emptyMessage" hidden>No products found.</p>
+      <div class="more"><button class="btn btn--ghost" id="homeMore" type="button" hidden>Load more</button></div>
+    </section>
+
+    <!-- FAVORITES VIEW -->
+    <section id="view-favorites" class="view" hidden>
+      <h2 class="view__title">Favorites</h2>
+      <div class="grid" id="favoritesGrid"></div>
+      <div class="status" id="favoritesStatus" hidden></div>
+      <div class="empty-state" id="favoritesEmpty" hidden>
+        <p>You haven’t favorited anything yet.</p>
+        <a href="#home" class="btn">Browse products</a>
+      </div>
+    </section>
+
+     <!-- CART VIEW -->
+    <section id="view-cart" class="view" hidden>
+      <h2 class="view__title">Shopping Cart</h2>
+      <p class="disclosure disclosure--left">
+        This is your list of products you want to buy. Checkout happens on the shop's own website,
+        and prices there may differ from what's shown here. Clicks on shop buttons are counted anonymously.
+      </p>
+      
+    <div class="status" id="cartStatus" hidden></div>
+      <div id="cartLayout">
+        <ul class="cart__items" id="cartItems"></ul>
+      </div>
+
+      <div class="empty-state" id="cartEmpty" hidden>
+        <p>Your cart is empty.</p>
+        <a href="#home" class="btn">Start shopping</a>
+      </div>
+    </section>
+
+        <!-- PROFILE VIEW -->
+    <p class="placeholder" id="profileLoading">Loading your account…</p>
+    <section id="view-profile" class="view" hidden>
+      
+      <!-- Logged OUT: login & register -->
+      <div class="auth" id="authPanel" hidden>
+        <h2 class="view__title">Welcome</h2>
+
+        <div class="auth__tabs" role="tablist">
+          <button class="auth__tab is-active" role="tab" data-tab="login">Log in</button>
+          <button class="auth__tab" role="tab" data-tab="register">Register</button>
+        </div>
+
+        <form class="form" id="loginForm" novalidate>
+          <div class="field">
+            <label for="loginUsername">Username</label>
+            <input id="loginUsername" name="loginUsername" type="text" autocomplete="username" />
+            <p class="field__error" data-error-for="loginUsername"></p>
+          </div>
+          <div class="field">
+            <label for="loginPassword">Password</label>
+            <input id="loginPassword" name="loginPassword" type="password" autocomplete="current-password" />
+            <p class="field__error" data-error-for="loginPassword"></p>
+          </div>
+          <p class="form__message" data-form-message></p>
+          <button class="btn btn--block" type="submit">Log in</button>
+        </form>
+
+        <form class="form" id="registerForm" novalidate hidden>
+          <div class="field">
+            <label for="regName">Name</label>
+            <input id="regName" name="name" type="text" autocomplete="name" />
+            <p class="field__error" data-error-for="name"></p>
+          </div>
+          <div class="field">
+            <label for="regUsername">Username</label>
+            <input id="regUsername" name="username" type="text" autocomplete="username" />
+            <p class="field__error" data-error-for="username"></p>
+          </div>
+          <div class="field">
+            <label for="regEmail">Email</label>
+            <input id="regEmail" name="email" type="email" autocomplete="email" />
+            <p class="field__error" data-error-for="email"></p>
+          </div>
+          <div class="field">
+            <label for="regPassword">Password</label>
+            <input id="regPassword" name="password" type="password" autocomplete="new-password" />
+            <p class="field__hint">At least 8 characters, with a letter and a number.</p>
+            <p class="field__error" data-error-for="password"></p>
+          </div>
+          <div class="field">
+            <label for="regConfirm">Confirm password</label>
+            <input id="regConfirm" name="confirmPassword" type="password" autocomplete="new-password" />
+            <p class="field__error" data-error-for="confirmPassword"></p>
+          </div>
+          <p class="form__message" data-form-message></p>
+          <button class="btn btn--block" type="submit">Create account</button>
+        </form>
+      </div>
+
+      <!-- Logged IN: account management -->
+      <div class="account" id="accountPanel" hidden>
+        <div class="account__header">
+          <div class="account__avatar" id="accountAvatar">G</div>
+          <div>
+            <h2 class="account__name" id="accountName"></h2>
+            <p class="account__handle" id="accountHandle"></p>
+          </div>
+          <button class="btn btn--ghost" id="logoutBtn" type="button">Log out</button>
+        </div>
+
+        <form class="form panel" id="profileForm" novalidate>
+          <h3>Profile information</h3>
+          <div class="field">
+            <label for="profName">Name</label>
+            <input id="profName" name="name" type="text" autocomplete="name" />
+            <p class="field__error" data-error-for="name"></p>
+          </div>
+          <div class="field">
+            <label for="profEmail">Email</label>
+            <input id="profEmail" name="email" type="email" autocomplete="email" />
+            <p class="field__error" data-error-for="email"></p>
+          </div>
+          <div class="field">
+            <label for="profBio">Short bio</label>
+            <textarea id="profBio" name="bio" rows="2" placeholder="Tell people what you love (max 160 characters)"></textarea>
+            <p class="field__error" data-error-for="bio"></p>
+          </div>
+          <div class="field">
+            <label for="profAvatar">Profile picture link (optional)</label>
+            <input id="profAvatar" name="avatar" type="url" placeholder="https://…" />
+            <p class="field__error" data-error-for="avatar"></p>
+          </div>
+          <p class="form__message" data-form-message></p>
+          <button class="btn" type="submit">Save changes</button>
+        </form>
+
+        <form class="form panel" id="usernameForm" novalidate>
+          <h3>Change username</h3>
+          <div class="field">
+            <label for="newUsername">Username</label>
+            <input id="newUsername" name="username" type="text" autocomplete="username" />
+            <p class="field__error" data-error-for="username"></p>
+          </div>
+          <p class="form__message" data-form-message></p>
+          <button class="btn" type="submit">Update username</button>
+        </form>
+
+        <form class="form panel" id="passwordForm" novalidate>
+          <h3>Change password</h3>
+          <div class="field">
+            <label for="curPassword">Current password</label>
+            <input id="curPassword" name="currentPassword" type="password" autocomplete="current-password" />
+            <p class="field__error" data-error-for="currentPassword"></p>
+          </div>
+          <div class="field">
+            <label for="newPassword">New password</label>
+            <input id="newPassword" name="newPassword" type="password" autocomplete="new-password" />
+            <p class="field__error" data-error-for="newPassword"></p>
+          </div>
+          <div class="field">
+            <label for="newConfirm">Confirm new password</label>
+            <input id="newConfirm" name="confirmPassword" type="password" autocomplete="new-password" />
+            <p class="field__error" data-error-for="confirmPassword"></p>
+          </div>
+          <p class="form__message" data-form-message></p>
+          <button class="btn" type="submit">Update password</button>
+        </form>
+
+                <section class="panel form" aria-labelledby="sessionsTitle">
+          <h3 id="sessionsTitle">Sessions</h3>
+          <p class="field__hint">Lost a phone or used a shared computer? This signs you out everywhere.</p>
+          <button class="btn btn--ghost" id="logoutAllBtn" type="button">Log out of all devices</button>
+        </section>
+      </div>
+
+              <form class="form panel" id="recommendForm" novalidate>
+          <h3 id="recommendTitle">Recommend a product</h3>
+          <p class="field__hint">
+            Add up to three shopping links so people can choose their platform.
+            Use your own affiliate links, and only from programs you've joined.
+          </p>
+
+          <div class="field">
+            <label for="recName">Product name</label>
+            <input id="recName" name="productName" type="text" />
+            <p class="field__error" data-error-for="productName"></p>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="recBrand">Brand</label>
+              <input id="recBrand" name="brand" type="text" />
+              <p class="field__error" data-error-for="brand"></p>
+            </div>
+            <div class="field">
+              <label for="recCategory">Category</label>
+              <select id="recCategory" name="category">
+                <option value="">Choose…</option>
+                <option value="skincare">Skincare</option>
+                <option value="makeup">Makeup</option>
+              </select>
+              <p class="field__error" data-error-for="category"></p>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="recOrigin">Brand origin</label>
+              <select id="recOrigin" name="origin">
+                <option value="">Choose…</option>
+                <option value="local">Local (Philippine brand)</option>
+                <option value="international">International</option>
+              </select>
+              <p class="field__error" data-error-for="origin"></p>
+            </div>
+            <div class="field">
+              <label for="recPrice">Price (₱)</label>
+              <input id="recPrice" name="price" type="number" min="0" step="0.01" inputmode="decimal" />
+              <p class="field__error" data-error-for="price"></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="recImage">Image link (optional)</label>
+            <input id="recImage" name="image" type="url" placeholder="https://…" />
+            <p class="field__error" data-error-for="image"></p>
+          </div>
+
+          <div class="field">
+            <label for="recDescription">Why do you recommend it?</label>
+            <textarea id="recDescription" name="description" rows="3"></textarea>
+            <p class="field__error" data-error-for="description"></p>
+          </div>
+
+          <fieldset class="links-box">
+            <legend>Where can people buy it? (at least one)</legend>
+            <div class="field">
+              <label for="recShopee">Shopee link</label>
+              <input id="recShopee" name="linkShopee" type="url" placeholder="https://shopee.ph/…" />
+              <p class="field__error" data-error-for="linkShopee"></p>
+            </div>
+            <div class="field">
+              <label for="recLazada">Lazada link</label>
+              <input id="recLazada" name="linkLazada" type="url" placeholder="https://www.lazada.com.ph/…" />
+              <p class="field__error" data-error-for="linkLazada"></p>
+            </div>
+            <div class="field">
+              <label for="recTiktok">TikTok Shop link</label>
+              <input id="recTiktok" name="linkTiktok" type="url" placeholder="https://www.tiktok.com/…" />
+              <p class="field__error" data-error-for="linkTiktok"></p>
+            </div>
+            <p class="field__error" data-error-for="links"></p>
+          </fieldset>
+
+          <p class="form__message" data-form-message></p>
+          <div class="form__actions">
+            <button class="btn" type="submit">Save recommendation</button>
+            <button class="btn btn--ghost" type="button" id="recommendCancel" hidden>Cancel editing</button>
+          </div>
+        </form>
+
+        <section class="panel form" aria-labelledby="myRecsTitle">
+          <h3 id="myRecsTitle">My recommendations</h3>
+          <ul class="mine-list" id="myRecs"></ul>
+          <p class="field__hint" id="myRecsEmpty">You haven't recommended anything yet.</p>
+        </section>
+
+                <section class="panel form" id="statsPanel" aria-labelledby="statsTitle">
+          <div class="panel__head">
+            <h3 id="statsTitle">Link performance</h3>
+            <button class="btn btn--ghost btn--small" id="statsRefresh" type="button">Refresh</button>
+          </div>
+          <p class="field__hint">
+            Clicks on your Shopee, Lazada, and TikTok Shop buttons in the last 30 days.
+            Bots are ignored, and repeat clicks from the same visitor within 30 minutes count once.
+            These are <strong>clicks, not sales</strong>: orders and commissions are only visible in each
+            platform's own affiliate dashboard.
+          </p>
+
+          <div class="status" id="statsStatus" hidden></div>
+
+          <div id="statsBody" hidden>
+            <p class="stats__total"><strong id="statsTotal">0</strong> clicks</p>
+            <ul class="stats__bars" id="statsPlatforms"></ul>
+
+            <div class="table-wrap">
+              <table class="stats__table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Shopee</th>
+                    <th>Lazada</th>
+                    <th>TikTok Shop</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="statsRows"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+    </section>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  </main>
+
+  <!-- type="module" lets us use import/export in the browser -->
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

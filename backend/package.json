@@ -1,0 +1,22 @@
+{
+  "name": "favorita-backend",
+  "version": "1.0.0",
+  "description": "API for the Favorita e-commerce site",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "seed": "node src/data/seedDb.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.4",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongodb": "^7.9.0",
+    "mongoose": "^9.12.2"
+  }
+}
