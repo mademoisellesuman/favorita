@@ -1,7 +1,7 @@
 import { parseHttps } from './product.js';
 
 // "me" would clash with the /users/me route. The others avoid impersonation.
-const RESERVED_USERNAMES = ['me', 'admin', 'root', 'api', 'support', 'glow'];
+const RESERVED_USERNAMES = ['me', 'admin', 'root', 'api', 'support', 'favorita'];
 
 const asObject = (body) =>
   body && typeof body === 'object' && !Array.isArray(body) ? body : {};
