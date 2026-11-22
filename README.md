@@ -34,6 +34,16 @@ npm run dev
 Open http://localhost:5000. Sample accounts all use the password `Password123`
 (development data only): `ana_glow`, `mika_beauty`, `joy_skin`.
 
+## Run it with Docker
+
+Requires Docker Desktop. Uses the same `backend/.env` as above.
+
+```bash
+docker compose up --build --watch
+```
+
+Open http://localhost:5000. See `docker-compose.local-db.yml` for an optional local MongoDB.
+
 ## Project structure
 
 ```
