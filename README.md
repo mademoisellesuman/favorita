@@ -1,4 +1,5 @@
 # Favorita
+![CI](https://github.com/mademoisellesuman/favorita/actions/workflows/ci.yml/badge.svg)
 
 A community-driven affiliate product discovery platform for skincare and makeup.
 Users recommend products and attach up to three shop links (Shopee, Lazada, TikTok Shop).
@@ -40,6 +41,17 @@ Requires Docker Desktop. Uses the same `backend/.env` as above.
 
 ```bash
 docker compose up --build --watch
+```
+
+## Testing
+
+Tests use a separate database (its name must end in `_test`, because tests wipe it).
+Put `TEST_MONGODB_URI=...` in `backend/.env.test`, then:
+
+```bash
+cd backend
+npm run lint
+npm test
 ```
 
 Open http://localhost:5000. See `docker-compose.local-db.yml` for an optional local MongoDB.
