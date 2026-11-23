@@ -56,6 +56,10 @@ npm test
 
 Open http://localhost:5000. See `docker-compose.local-db.yml` for an optional local MongoDB.
 
+**Live demo:** https://favorita.vercel.app · **API health:** https://favorita-api.onrender.com/api/health
+
+> The API runs on a free tier and sleeps when idle, so the first request can take up to a minute.
+
 ## Project structure
 
 ```

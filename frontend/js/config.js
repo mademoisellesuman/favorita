@@ -1,9 +1,11 @@
-// Where the API lives. Same server during development, so a relative path works.
-// At deployment (Stage 10) this becomes the backend's full URL.
-export const API_BASE = '/api';
+// Your live API (Render). Replace with YOUR service URL. Keep the "/api" at the end.
+const PRODUCTION_API = 'https://favorita-api.onrender.com/api';
 
-export const PLATFORMS = { shopee: 'Shopee', lazada: 'Lazada', tiktok: 'TikTok Shop' };
-export const MAX_LINKS = 3;   // one per platform
+// On your own computer (npm run dev, or Docker) Express serves both the site and the API,
+// so a relative path works. Anywhere else, use the live API.
+const isLocal = ['localhost', '127.0.0.1'].includes(location.hostname);
+
+export const API_BASE = isLocal ? '/api' : PRODUCTION_API;
 
 // The tracked link for a buy button. The affiliate URL itself never appears
 // in the page: the server looks it up and redirects.
