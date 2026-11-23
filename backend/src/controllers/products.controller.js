@@ -7,7 +7,7 @@ import { escapeRegex } from '../utils/escapeRegex.js';
 import { presentProduct, OWNER_POPULATE } from '../utils/present.js';
 import { validateProduct } from '../validators/product.js';
 import { CATEGORIES, ORIGINS, PLATFORM_NAMES } from '../config/constants.js';
-import { Click } from '../models/Click.js';
+
 
 /* ---------- Helpers ---------- */
 function failIfInvalid(errors) {
