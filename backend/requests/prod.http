@@ -1,0 +1,36 @@
+@base = https://favorita-api.onrender.com/api
+
+### 1. Register on production. Expect 201
+# @name reg
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{ "name": "Prod Test", "username": "prod_test", "email": "prodtest@example.com", "password": "ProdTest123" }
+
+###
+@token = {{reg.response.body.$.data.token}}
+
+### 2. Create a product. Expect 201
+POST {{base}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Production Test Serum",
+  "brand": "Test Brand",
+  "category": "skincare",
+  "origin": "local",
+  "price": 250,
+  "description": "Created on the live API to test the deployment.",
+  "links": [{ "platform": "shopee", "url": "https://shopee.ph/prod-test" }]
+}
+
+### 3. It shows up publicly. Expect total 1
+GET {{base}}/products
+
+### 4. Security headers are present. Look for content-security-policy and strict-transport-security
+GET {{base}}/health
+
+### 5. CORS: an unlisted origin gets NO access-control-allow-origin header
+GET {{base}}/products
+Origin: https://evil.example

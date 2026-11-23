@@ -1,0 +1,22 @@
+# An OVERRIDE file: it adds to docker-compose.yml instead of replacing it.
+services:
+  api:
+    environment:
+      # "mongo" is the service name below. Compose gives each service a hostname on a private network.
+      MONGODB_URI: mongodb://mongo:27017/favorita
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  mongo:
+    image: mongo:8
+    volumes:
+      - mongo-data:/data/db        # a named volume: data survives container removal
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 })"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  mongo-data:
