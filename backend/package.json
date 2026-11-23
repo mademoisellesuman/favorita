@@ -4,10 +4,13 @@
   "description": "API for the Favorita e-commerce site",
   "main": "src/server.js",
   "type": "module",
-  "scripts": {
+    "scripts": {
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
-    "seed": "node src/data/seedDb.js"
+    "seed": "node src/data/seedDb.js",
+    "lint": "eslint .",
+    "test": "node --test --test-concurrency=1 \"tests/**/*.test.js\"",
+    "audit:prod": "npm audit --omit=dev --audit-level=high"
   },
   "license": "ISC",
   "dependencies": {
@@ -20,5 +23,10 @@
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.9.0",
     "mongoose": "^9.12.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.15.0",
+    "globals": "^17.14.0"
   }
 }
